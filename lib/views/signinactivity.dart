@@ -66,10 +66,11 @@ handleGoogleSignIn(BuildContext context) async {
   try {
     GoogleSignInAccount user = googleSignIn.currentUser;
     if (user == null) user = await googleSignIn.signInSilently();
-
+print("user"+user.email);
     if (user == null) {
       await googleSignIn.signIn();
 //      analytics.logLogin();
+    print(googleSignIn.currentUser);
     }
 
     if (auth.currentUser == null) {
@@ -98,11 +99,11 @@ handleGoogleSignIn(BuildContext context) async {
   } catch (error) {}
 }
 
-//firebaseSignIn(BuildContext context) async {
-//  if (auth.currentUser != null) {
-//    Navigator.pushNamed(context, MyPostsPage.routeName);
-//  }
-//}
+firebaseSignIn(BuildContext context) async {
+  if (auth.currentUser != null) {
+    Navigator.pushNamed(context, MyPostsPage.routeName);
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -130,7 +131,6 @@ class MyHomePage extends StatefulWidget {
 
 class PersonData {
   String email = '';
-//  String phoneNumber = '';
   String password = '';
 }
 
@@ -139,29 +139,25 @@ class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
   bool _autovalidate = false;
   bool _formWasEdited = false;
+  final GlobalKey<FormFieldState<String>> _passwordFieldKey = new GlobalKey<FormFieldState<String>>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
 
   PersonData person = new PersonData();
 
-
-
-
-  void _googleSignIn() {
+  void googleSignIn() {
     handleGoogleSignIn(context);
 //    CircularProgressIndicator indicator=new CircularProgressIndicator();
 //    analytics.logEvent(name: 'send_user');
-//    Navigator.pushNamed(context, MyPostsPage.routeName);
+    Navigator.pushNamed(context, MyPostsPage.routeName);
   }
-
-
 
   String _validateEmail(String value) {
     _formWasEdited = true;
-    if (value.isEmpty)
-      return 'Name is required.';
-    final RegExp nameExp = new RegExp(r'^[A-za-z ]+$');
+    if (value.isEmpty) return 'Email is required.';
+    final RegExp nameExp = new RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$");
     if (!nameExp.hasMatch(value))
-      return 'Please enter only alphabetical characters.';
+      return 'Please enter only email.';
     return null;
   }
 
@@ -178,158 +174,115 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: screenSize.width),
             alignment: FractionalOffset.topCenter,
           ),
+//          new Container(
+//            padding: new EdgeInsets.fromLTRB(50.0, 0.0, 50.0, 0.0),
+//            child: new Form(
+//              child: new Column(
+//                children: <Widget>[
+//                  new TextFormField(
+//                    decoration: const InputDecoration(
+//                      icon: const Icon(
+//                        Icons.email,
+//                        color: Colors.blue,
+//                      ),
+//                      hintText: 'Please enter your Email address!',
+//                      labelText: 'Email *',
+//                    ),
+//                    onSaved: (String value) {
+//                      person.email = value;
+//                    },
+//                    validator: _validateEmail,
+//                  ),
+//                  new Row(
+//                    crossAxisAlignment: CrossAxisAlignment.start,
+//                    children: <Widget>[
+//                      new Expanded(
+//                        child: new TextFormField(
+//                          key: _passwordFieldKey,
+//                          decoration: const InputDecoration(
+//                            icon: const Icon(
+//                              Icons.security,
+//                              color: Colors.red,
+//                            ),
+//                            hintText: 'How do you log in?',
+//                            labelText: 'Password *',
+//                          ),
+//                          obscureText: true,
+//                          onSaved: (String value) {
+//                            person.password = value;
+//                          },
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                  new Row(
+//                    mainAxisAlignment: MainAxisAlignment.center,
+//                    children: <Widget>[
+//                      new Container(
+//                        padding: const EdgeInsets.all(20.0),
+//                        alignment: const FractionalOffset(0.5, 0.5),
+//                        child: new RaisedButton(
+//                          child: const Text('Sign In'),
+//                          onPressed: _handlePetluvsLogin,
+//                        ),
+//                      ),
+//                      new Container(
+//                        padding: const EdgeInsets.all(20.0),
+//                        alignment: const FractionalOffset(0.5, 0.5),
+//                        child: new RaisedButton(
+//                          child: const Text('Sign Up'),
+//                          onPressed: _handlePetluvsLogin,
+//                        ),
+//                      ),
+//                    ],
+//                  ),
+//                ],
+//              ),
+//            ),
+//          ),
           new Container(
             child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-
-                new Form(
-                    key: _formKey,
-                    autovalidate: _autovalidate,
-//                    onWillPop: _warnUserAboutInvalidData,
-                    child: new ListView(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      children: <Widget>[
-                        new TextFormField(
-                          decoration: const InputDecoration(
-                            icon: const Icon(Icons.email),
-                            hintText: 'Please enter your Email Address.',
-                            labelText: 'Email Address',
-                          ),
-                          onSaved: (String value) { person.email = value; },
-                          validator: _validateEmail,
-                        ),
-//                        new TextFormField(
-//                          decoration: const InputDecoration(
-//                              icon: const Icon(Icons.phone),
-//                              hintText: 'Where can we reach you?',
-//                              labelText: 'Phone Number *',
-//                              prefixText: '+1'
-//                          ),
-//                          keyboardType: TextInputType.phone,
-//                          onSaved: (String value) { person.phoneNumber = value; },
-//                          validator: _validatePhoneNumber,
-//                          // TextInputFormatters are applied in sequence.
-//                          inputFormatters: <TextInputFormatter> [
-//                            WhitelistingTextInputFormatter.digitsOnly,
-//                            // Fit the validating format.
-//                            _phoneNumberFormatter,
-//                          ],
-//                        ),
-//                        new TextFormField(
-//                          decoration: const InputDecoration(
-//                            hintText: 'Tell us about yourself',
-//                            helperText: 'Keep it short, this is just a demo',
-//                            labelText: 'Life story',
-//                          ),
-//                          maxLines: 3,
-//                        ),
-//                        new TextFormField(
-//                          keyboardType: TextInputType.number,
-//                          decoration: const InputDecoration(
-//                              labelText: 'Salary',
-//                              prefixText: '\$',
-//                              suffixText: 'USD',
-//                              suffixStyle: const TextStyle(color: Colors.green)
-//                          ),
-//                          maxLines: 1,
-//                        ),
-                        new Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-    new Container(
-    padding: const EdgeInsets.all(20.0),
-    alignment: const FractionalOffset(0.5, 0.5),
-    child: new RaisedButton(
-    child: const Text('SUBMIT'),
-    onPressed: _handlePetluvsLogin,
-    ),
-    ),
-
-                          ],
-                        ),
-
-                      ],
-                    )
-                ),
-
-                new TextField(
-                  controller: _controller,
-                  decoration: new InputDecoration(
-                    hintText: 'Type something',
+                new Container(
+                  child: new Center(
+                    child: new Icon(Icons.arrow_downward),
                   ),
-                ),
-                new TextField(
-                  controller: _controller,
-                  decoration: new InputDecoration(
-                    hintText: 'Type something',
-                  ),
+//
                 ),
                 new Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new RaisedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          child: new AlertDialog(
-                            title: new Text('What you typed'),
-                            content: new Text(_controller.text),
-                          ),
-                        );
-                      },
-                      child: new Text('DONE'),
+                    new Container(
+                      child: new InkWell(
+                        child: new Image(
+                          image: new AssetImage('graphics/google.png'),
+                          width: screenSize.width / 8,
+                        ),
+                        onTap: (){handleGoogleSignIn(context);},
+                      ),
+                      padding: new EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
                     ),
-                    new RaisedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          child: new AlertDialog(
-                            title: new Text('What you typed'),
-                            content: new Text(_controller.text),
-                          ),
-                        );
-                      },
-                      child: new Text('DONE'),
+                    new Container(
+                      child: new InkWell(
+                        child: new Image(
+                          image: new AssetImage('graphics/facebook.png'),
+                          width: screenSize.width / 8,
+                        ),
+                        onTap: googleSignIn,
+                      ),
+                      padding: new EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
+                    ),
+                    new Container(
+                      child: new InkWell(
+                        child: new Image(
+                          image: new AssetImage('graphics/instagram.png'),
+                          width: screenSize.width / 8,
+                        ),
+                        onTap: googleSignIn,
+                      ),
+                      padding: new EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
                     ),
                   ],
-                ),
-              ],
-            ),
-          ),
-          new Container(
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Container(
-                  child: new InkWell(
-                    child: new Image(
-                      image: new AssetImage('graphics/google.png'),
-                      width: screenSize.width / 8,
-                    ),
-                    onTap: _googleSignIn,
-                  ),
-                  padding: new EdgeInsets.all(25.0),
-                ),
-                new Container(
-                  child: new InkWell(
-                    child: new Image(
-                      image: new AssetImage('graphics/facebook.png'),
-                      width: screenSize.width / 8,
-                    ),
-                    onTap: _googleSignIn,
-                  ),
-                  padding: new EdgeInsets.all(25.0),
-                ),
-                new Container(
-                  child: new InkWell(
-                    child: new Image(
-                      image: new AssetImage('graphics/instagram.png'),
-                      width: screenSize.width / 8,
-                    ),
-                    onTap: _googleSignIn,
-                  ),
-                  padding: new EdgeInsets.all(25.0),
                 ),
               ],
             ),
@@ -337,5 +290,23 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+
+  void showInSnackBar(String value) {
+    _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        content: new Text(value)
+    ));
+  }
+
+  void _handlePetluvsLogin() {
+    final FormState form = _formKey.currentState;
+    if (!form.validate()) {
+      _autovalidate = true;  // Start validating on every change.
+      showInSnackBar('Please fix the errors in red before submitting.');
+    } else {
+      form.save();
+      showInSnackBar('${person.email}\'s phone number is ${person.password}');
+    }
   }
 }
