@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1094565580843",
+    "firebase_url": "https://pet-luvs-2a7f4.firebaseio.com",
+    "project_id": "pet-luvs-2a7f4",
+    "storage_bucket": "pet-luvs-2a7f4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094565580843:android:e72551de8e8390c0",
+        "android_client_info": {
+          "package_name": "com.yourcompany.petluvs"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094565580843-c83lgdat106kj7rvo5td9117s6p7fg0d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yourcompany.petluvs",
+            "certificate_hash": "8e0fb8762f42ac1e3a51ef516610e511629aa921"
+          }
+        },
+        {
+          "client_id": "1094565580843-60uenrn300ergoq8ms6cjd8vmttnp0fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu2oVgRg9jxc0y4WY7TDoN9bYvTRhNAfc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094565580843-60uenrn300ergoq8ms6cjd8vmttnp0fa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
